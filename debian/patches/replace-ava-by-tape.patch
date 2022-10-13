@@ -1,0 +1,80 @@
+Description: replace ava by tape
+Author: Xavier Guimard <yadd@debian.org>
+Forwarded: not-needed
+Last-Update: 2020-12-21
+
+--- a/test.js
++++ b/test.js
+@@ -1,40 +1,47 @@
+-import fs from 'fs';
+-import test from 'ava';
+-import pEvent from 'p-event';
+-import gzipSize from '.';
++const fs = require('fs');
++const test = require('tape');
++const pEvent = require('p-event');
++const gzipSize = require('.');
+ 
+ const fixture = fs.readFileSync('test.js', 'utf8');
+ 
+ test('get the gzipped size', async t => {
+ 	t.true(await gzipSize(fixture) < fixture.length);
++	t.end();
+ });
+ 
+ test('gzip compression level', async t => {
+ 	t.true(await gzipSize(fixture, {level: 6}) < await gzipSize(fixture, {level: 1}));
++	t.end();
+ });
+ 
+ test('sync - get the gzipped size', t => {
+ 	t.true(gzipSize.sync(fixture) < fixture.length);
++	t.end();
+ });
+ 
+ test('sync - match async version', async t => {
+ 	t.is(gzipSize.sync(fixture), await gzipSize(fixture));
++	t.end();
+ });
+ 
+ test('sync - gzip compression level', t => {
+ 	t.true(gzipSize.sync(fixture, {level: 6}) < gzipSize.sync(fixture, {level: 1}));
++	t.end();
+ });
+ 
+ test('stream', async t => {
+ 	const stream = fs.createReadStream('test.js').pipe(gzipSize.stream());
+ 	await pEvent(stream, 'end');
+ 	t.is(stream.gzipSize, gzipSize.sync(fixture));
++	t.end();
+ });
+ 
+ test('gzip-size event', async t => {
+ 	const stream = fs.createReadStream('test.js').pipe(gzipSize.stream());
+ 	const size = await pEvent(stream, 'gzip-size');
+ 	t.is(size, gzipSize.sync(fixture));
++	t.end();
+ });
+ 
+ test('passthrough', async t => {
+@@ -48,16 +55,20 @@
+ 
+ 	await pEvent(stream, 'end');
+ 	t.is(out, fixture);
++	t.end();
+ });
+ 
+ test('file - get the gzipped size', async t => {
+ 	t.true(await gzipSize.file('test.js') < fixture.length);
++	t.end();
+ });
+ 
+ test('fileSync - get the gzipped size', t => {
+ 	t.is(gzipSize.fileSync('test.js'), gzipSize.sync(fixture));
++	t.end();
+ });
+ 
+ test('file - match async version', async t => {
+ 	t.is(await gzipSize.file('test.js'), await gzipSize(fixture));
++	t.end();
+ });

@@ -1,0 +1,25 @@
+Source: node-gzip-size
+Section: javascript
+Priority: optional
+Maintainer: Debian Javascript Maintainers <pkg-javascript-devel@lists.alioth.debian.org>
+Uploaders: Pirate Praveen <praveen@debian.org>
+Build-Depends: debhelper-compat (= 13)
+ , dh-sequence-nodejs
+ , node-duplexer <!nocheck>
+ , node-p-timeout <!nocheck>
+ , node-tape <!nocheck>
+Standards-Version: 4.5.1
+Vcs-Browser: https://salsa.debian.org/js-team/node-gzip-size
+Vcs-Git: https://salsa.debian.org/js-team/node-gzip-size.git
+Homepage: https://github.com/sindresorhus/gzip-size
+Testsuite: autopkgtest-pkg-nodejs
+Rules-Requires-Root: no
+
+Package: node-gzip-size
+Architecture: all
+Depends: ${misc:Depends}
+ , node-duplexer
+Description: Get the gzipped size of a string or buffer
+ This module is a dependency of react-dev-util and webpack-bundle-analyzer
+ .
+ Node.js is an event-based server-side JavaScript engine.
